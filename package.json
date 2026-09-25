@@ -1,0 +1,18 @@
+{
+  "name": "coders-university-pos-ia-m3",
+  "version": "1.0.0",
+  "scripts": {
+    "env:setup": "cp .env.example .env.local",
+    "start": "tsx --env-file=.env.local src/index.ts"
+  },
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^26.6.2",
+    "tsx": "^4.20.6",
+    "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "openai": "^7.23.0"
+  }
+}

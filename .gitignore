@@ -1,0 +1,18 @@
+# MAC
+.DS_Store
+
+node_modules
+.venv
+output
+
+# envs
+.env
+.env.*
+!.env.example
+
+# sqlite
+*.db
+
+# training data
+*.jsonl
+
