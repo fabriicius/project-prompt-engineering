@@ -1,4 +1,5 @@
-import openai from "./client/openia.ts";
+import { openai }  from "./client/openia.ts";
+import { generateWithCritique } from "./utils/generateWithCritique.ts";
 
 const PERSONAS = {
     juridico: "Você é um advogado especializado em direito civil, com vasta experiência em contratos e litígios. Sua abordagem é clara, objetiva e fundamentada na legislação vigente.",
@@ -46,27 +47,9 @@ function createPromptTemplate(
 }
 
 async function chatWithPersona(persona: string, message: string) {
-    const response = await openai.chat.completions.create({
-        messages: [
-            {
-                role: "system",
-                content: PERSONAS[persona as keyof typeof PERSONAS]
-            },
-            {
-                role: "user",
-                content: message
-            }
-        ],
-        stream: true,
-        model: "gpt-4o-mini",
-    });
-
-    for await (const event of response) {
-        const constant = event.choices[0].delta.content ?? "";
-        if (constant.length > 0) {
-            process.stdout.write(constant);
-        }
-    }   
+   const systemPrompt = PERSONAS[persona as keyof typeof PERSONAS];
+   const response = await generateWithCritique(systemPrompt, message);
+   console.log(`Resposta final do modelo para a persona "${persona}":\n${response}`);
 }
 
 await chatWithPersona("juridico", 
