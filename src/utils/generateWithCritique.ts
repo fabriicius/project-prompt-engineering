@@ -1,9 +1,32 @@
 import {  openai } from "../client/openia.ts"
+import {  ContextWindow } from "../context-window.ts";
 import { withRetry } from "./withRetry.ts";
 
+
+//essa funcao será uma normal pois a critique consome muitos tokens 
+export async function generate(
+  system: string,
+  prompt : ContextWindow,
+): Promise<string> {
+  
+    return await withRetry(async () => {
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        { role: "system", content: system },
+        ...prompt.getMessages()
+      ],
+    });
+    return response.choices[0].message?.content ?? "";
+  });
+
+};
+
+
+// esta função é uma tecnica de prompt chaining, onde a resposta inicial é gerada, depois uma crítica é feita sobre essa resposta, e finalmente uma nova resposta é gerada com base na crítica recebida. Isso ajuda a melhorar a qualidade da resposta final.
 export async function generateWithCritique(
   system: string,
-  prompt : string,
+  prompt : ContextWindow,
 ): Promise<string> {
   // Step 1: Generate initial response
   const draft = await withRetry(async () => {
@@ -11,7 +34,7 @@ export async function generateWithCritique(
       model: "gpt-4o-mini",
       messages: [
         { role: "system", content: system },
-        { role: "user", content: prompt },
+        ...prompt.getMessages()
       ],
     });
     return response.choices[0].message?.content ?? "";

@@ -1,8 +1,8 @@
-import { History } from "../types.ts";
+import { Message } from "../types.ts";
 import { openai } from "../client/openia.ts";
 
 
-export async function streamResponse(history: History[], systemContent?: string): Promise<string> {
+export async function streamResponse(history: Message[], systemContent?: string): Promise<string> {
     let fullResponse = "";
 
     const stream = await openai.chat.completions.create({

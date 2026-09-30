@@ -1,5 +1,5 @@
 import * as readline from "node:readline/promises";
-import { History } from "./types.ts";
+import { Message } from "./types.ts";
 import { streamResponse } from "./utils/streamResponse.ts";
 
 const systemPrompt = process.argv[2];
@@ -9,7 +9,7 @@ const rl = readline.createInterface({
     output : process.stdout 
  });
 
- const history: History[] = [];
+ const history: Message[] = [];
 
 while(true) {
   const userPrompt = await rl.question(
