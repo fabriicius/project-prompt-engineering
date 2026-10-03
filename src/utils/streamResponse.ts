@@ -16,14 +16,13 @@ export async function streamResponse(history: Message[], systemContent?: string)
     stream: true,
    });
 
-
     for await (const chunk of stream) {
-    const delta = chunk.choices[0]?.delta?.content;
-    if (delta) {
-      process.stdout.write(delta);
-      fullResponse += delta;
+      const delta = chunk.choices[0]?.delta?.content;
+         if (delta) {
+         process.stdout.write(delta);
+         fullResponse += delta;
+        }
     }
-  }
 
   console.log("\n")
   return fullResponse;

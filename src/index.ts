@@ -5,7 +5,7 @@ import { sumarize } from "./utils/summarizeHistory.ts";
 import { MessageRepository } from "./messageRepository.ts";
 
 
-const windowId =  process.argv[2] || crypto.randomUUID(); // You can change this to a unique identifier for different sessions
+const windowId = process.argv[2] || crypto.randomUUID(); // You can change this to a unique identifier for different sessions
 const contextWindow = new ContextWindow();
 const messageRepository = new MessageRepository();
 
@@ -13,9 +13,13 @@ console.log(`----------- Sessão iniciada com ID: ${windowId} ------------------
 
 
 const initalMessages = messageRepository.load(windowId);
-if(initalMessages.length > 0) {
+if (initalMessages.length > 0) {
     console.log(`Restaurando histórico de mensagens para a janela de contexto com ID: ${windowId}`);
-    initalMessages.forEach((msg) => {contextWindow.restore(msg.role, msg.content);});
+    initalMessages.forEach((msg) => {
+        contextWindow.restore(
+            msg.role,
+            msg.content);
+    });
 
 }
 
@@ -97,7 +101,7 @@ function createPromptTemplateJurico(
     contract: string,
     detailLevel: PromptDetailLevel,
     audience: PromptAudience,
-    ) : string {
+): string {
 
     const detailInstructions = {
         high: "Forneça uma resposta altamente detalhada, estruturada em etapas, com contexto, exemplos e ressalvas importantes.",
@@ -154,7 +158,7 @@ await chatWithPersona("juridico", "Quantas clausas principais existem no contrat
 // console.log("-------------------------------------------------");
 // await chatWithPersona("juridico", "Qual foi minha primeira pergunta para você?");
 console.log("-------------------------------------------------");
-console.log(await sumarize(contextWindow));
+//console.log(await sumarize(contextWindow));
 
 
 console.log(`----------- Para resumir a sessão ultize o ID: ${windowId} ----------------------------------`);
