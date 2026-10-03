@@ -1,9 +1,11 @@
+import { SyncShare } from "node:stream/iter";
 import { openai } from "../client/openia";
 import { ContextWindow } from "../context-window";
+import { Message } from "../types";
 import { generate, generateWithCritique } from "./generateWithCritique";
 import { withRetry } from "./withRetry";
 
-async function sumarize(contextWindow: ContextWindow) 
+async function sumarize(messages: Message[]) 
  : Promise<string> {
     const summaryPrompt = `
         Você é um assistente que resume conversas. 
@@ -12,9 +14,16 @@ async function sumarize(contextWindow: ContextWindow)
         limite o resumo a 1 parágrafos, e não inclua informações que não estejam na conversa.
     `;
 
-    const summary = await generate(summaryPrompt, contextWindow);
-      
-    return summary;
+    return await withRetry(async () => {
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        { role: "system", content: summaryPrompt },
+        ...messages
+      ],
+    });
+    return response.choices[0].message?.content ?? "";
+  });
 }
 
 export { sumarize };

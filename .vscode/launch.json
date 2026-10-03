@@ -2,13 +2,14 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Depurar aplicação",
+      "name": "Depurar arquivo atual",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/src/index.ts",
+      "program": "${file}",
       "runtimeArgs": ["--import", "tsx"],
+      "args": ["Você é um assistente útil e responda em português.", "bf0bb1a6-d58c-44b6-8ca1-143ec2eca5d0"],
       "envFile": "${workspaceFolder}/.env.local",
-      "console": "integratedTerminal",
+      "console": "externalTerminal",
       "skipFiles": ["<node_internals>/**"]
     }
   ]

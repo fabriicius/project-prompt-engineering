@@ -1,0 +1,22 @@
+type ValidationResult = {
+    isValid: boolean;
+    errors?: string;
+};
+
+
+export function validateOutput(
+     response : string
+    ,hallucinationSignals: string[]
+     ): ValidationResult {
+
+    const errors: string[] = [];
+
+    if(hallucinationSignals.some(signal => response.includes(signal))) {
+        errors.push("Output contains hallucination signals.");
+    }
+
+    return {
+        isValid: errors.length === 0,
+        errors: errors.join(", ")
+    };
+}
