@@ -51,7 +51,9 @@ while(true) {
            stitchedMessages, 
            systemPrompt);
 
-   const validationOutput = validateOutput(fullResponse, ["voce deve fazer", "eu acho que voce deveria fazer" , "voce deve fazer" , "o meu conselho pra voce é"]);
+   const validationOutput = validateOutput(fullResponse, 
+    ["voce deve fazer", "eu acho que voce deveria fazer",
+     "voce deve fazer" , "o meu conselho pra voce é"]);
   if(!validationOutput.isValid) {
     console.log(`Saída inválida: ${validationOutput.errors}`);
     continue;
