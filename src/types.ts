@@ -3,7 +3,7 @@ export type Message = {
     content: string;            
 }
 
-export type IRepository<T> = {
-    save(session: string, data: T): void;
-    load(session: string): T[];
+export type RagExample = {
+    q: string;
+    a: string;
 }

@@ -1,7 +1,7 @@
 import { DatabaseSync } from "node:sqlite";
-import { IRepository, Message } from "./types.ts";
+import { Message } from "./types.ts";
 
-export class MessageRepository implements IRepository<Message> {
+export class MessageRepository {
     private db : DatabaseSync;
     constructor() {
         this.db = new DatabaseSync("project_ia.db");
