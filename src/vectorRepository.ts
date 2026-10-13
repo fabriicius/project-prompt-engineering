@@ -1,5 +1,7 @@
 import { DatabaseSync } from "node:sqlite";
 import { cosineSimilarity } from "./utils/cosineSimilarity";
+import { hybridScore } from "./utils/hybridScore";
+import { keywordScore } from "./utils/keywordScore";
 
 export class VectorRepository {
     private db : DatabaseSync;
@@ -24,16 +26,18 @@ export class VectorRepository {
         `).run(source, chunk, JSON.stringify(embeddings));
     }
 
-    load(inputEmbedding: number[], topK =5 ) 
+    load(input:string , inputEmbedding: number[], topK =5  , minScore = 0.7) 
     { 
         const documts = this.db.prepare(`
             SELECT source, chunk, embedding FROM documents;
         `).all() as {chunk : string , embedding : string} [] 
 
+
         return documts.map(doc => ({ 
             chunk: doc.chunk,
-            score: cosineSimilarity(inputEmbedding, JSON.parse(doc.embedding))
-        })).sort((d1, d2) => d2.score - d1.score)
+            score: hybridScore(cosineSimilarity(inputEmbedding, JSON.parse(doc.embedding)), 
+            keywordScore(input, doc.chunk)) 
+        })).filter(doc => doc.score >= minScore).sort((d1, d2) => d2.score - d1.score)
         .slice( 0, topK) 
     }
 }

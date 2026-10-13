@@ -11,7 +11,7 @@ export async function ragAnswer(
    const questionEmbedding = await embed(question);
 
   // 2. retrieves the most relevant chunks from the vector repository
-  const result  = await repo.load(questionEmbedding);
+  const result  = await repo.load(question, questionEmbedding);
   const chunks = result.map((r: any) => r.chunk);
 
   // 3. builds a prompt with the question and the retrieved chunks
